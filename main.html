@@ -202,3 +202,54 @@
     }
 
     .result-value {
+      font-size: 3rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .result-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .status-msg {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.2em;
+    }
+    .status-msg.success { color: var(--success); }
+    .status-msg.error { color: var(--err); }
+    .status-msg.warn { color: var(--warn); }
+
+    .history-list {
+      list-style: none;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .history-item:last-child { border-bottom: none; }
+
+    .history-nonce {
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+    .history-bound { color: var(--accent); font-weight: 600; }
+    .history-result { color: var(--success); font-family: var(--font-mono); }
+    .history-pending { color: var(--warn); }
+
+    .address-display {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      word-break: break-all;
