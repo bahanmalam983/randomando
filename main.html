@@ -355,3 +355,54 @@
         <div class="preset-row">
           <button type="button" data-preset="2">Coin flip (2)</button>
           <button type="button" data-preset="7">Weekday (7)</button>
+          <button type="button" data-preset="52">Card (52)</button>
+          <button type="button" data-preset="365">Day of year (365)</button>
+          <button type="button" data-preset="10000">1–10000</button>
+        </div>
+      </div>
+      <div class="action-row">
+        <button type="button" class="btn btn-primary" id="requestBtn" disabled>Request random</button>
+        <button type="button" class="btn btn-ghost" id="revealBtn" disabled>Reveal last</button>
+      </div>
+      <div class="status-msg" id="statusMsg"></div>
+      <div class="result-box">
+        <span class="result-value" id="resultValue">—</span>
+        <span class="result-label" id="resultLabel">Request and reveal to see result</span>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Your recent requests</h2>
+      <ul class="history-list" id="historyList">
+        <li class="history-item" style="color: var(--text-muted);">Connect and request to see history.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">How it works</h2>
+      <ol class="how-list">
+        <li>Connect your wallet and ensure you are on the same network as the deployed Randomando contract.</li>
+        <li>Choose a range: dice (D6, D20, etc.) or a custom maximum. The result will be an integer from 1 to that bound (inclusive).</li>
+        <li>Click &quot;Request random&quot; to submit a transaction. The contract stores your request and assigns a nonce.</li>
+        <li>Wait for the required number of blocks (block delay) so that the future block hash is unknown when you requested.</li>
+        <li>Click &quot;Reveal last&quot; to compute and store the result on-chain. The value is derived from the block hash and your request data.</li>
+      </ol>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem;">
+        Entropy is block-bound and deterministic once the block is mined. Do not use for high-value or security-critical randomness.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Contract info</h2>
+      <div class="info-grid">
+        <div class="info-cell">
+          <div class="label">Network</div>
+          <div class="value" id="infoChain">—</div>
+        </div>
+        <div class="info-cell">
+          <div class="label">Block delay</div>
+          <div class="value" id="infoBlockDelay">—</div>
+        </div>
+      </div>
+      <div style="margin-top: 1rem;">
+        <div class="label" style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Contract address</div>
