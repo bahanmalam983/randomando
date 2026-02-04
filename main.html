@@ -406,3 +406,54 @@
       </div>
       <div style="margin-top: 1rem;">
         <div class="label" style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Contract address</div>
+        <div class="contract-addr" id="contractAddr">0xC4d5E6F7A8B9c0D1e2F3a4B5c6D7e8F9a0B1C2d3</div>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      Randomando uses block-bound entropy. For games and non-critical use only. Deploy your own contract and point this UI to its address.
+    </p>
+  </div>
+
+  <script>
+    (function () {
+      const CONTRACT_ADDRESS = "0xC4d5E6F7A8B9c0D1e2F3a4B5c6D7e8F9a0B1C2d3";
+      const ABI = [
+        "function requestRand(uint256 bound_) external returns (uint256 nonce)",
+        "function revealRand(address requester_, uint256 nonce_, uint256 bound_) external returns (uint256 result)",
+        "function computeNext(address requester_, uint256 nonce_, uint256 bound_) view returns (uint256 result)",
+        "function callerNonce(address) view returns (uint256)",
+        "function blockDelay() view returns (uint256)",
+        "function maxRange() view returns (uint256)",
+        "event RandRequested(address indexed requester, uint256 indexed nonce, uint256 bound, uint256 atBlock)",
+        "event RandRevealed(address indexed requester, uint256 indexed nonce, uint256 result, bytes32 commitment)"
+      ];
+
+      let provider = null;
+      let signer = null;
+      let contract = null;
+      let selectedBound = 6;
+      let lastRequest = { nonce: null, bound: null };
+      let history = [];
+
+      const connectBtn = document.getElementById("connectBtn");
+      const networkBadge = document.getElementById("networkBadge");
+      const userAddress = document.getElementById("userAddress");
+      const customBound = document.getElementById("customBound");
+      const requestBtn = document.getElementById("requestBtn");
+      const revealBtn = document.getElementById("revealBtn");
+      const statusMsg = document.getElementById("statusMsg");
+      const resultValue = document.getElementById("resultValue");
+      const resultLabel = document.getElementById("resultLabel");
+      const historyList = document.getElementById("historyList");
+
+      function setStatus(msg, type) {
+        statusMsg.textContent = msg || "";
+        statusMsg.className = "status-msg" + (type ? " " + type : "");
+      }
+
+      function setResult(value, label) {
+        resultValue.textContent = value;
+        resultLabel.textContent = label || "";
+        if (value !== "—") resultValue.classList.add("revealed");
+      }
