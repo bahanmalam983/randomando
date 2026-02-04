@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Randomando — On-Chain Random Number Generator</title>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.9.0/dist/ethers.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-deep: #0c0b12;
+      --bg-panel: #16141f;
+      --bg-elevated: #1e1b2a;
+      --border: #2d2840;
+      --text: #e8e4f0;
+      --text-muted: #8b849a;
+      --accent: #7c5cff;
+      --accent-dim: #5a42c2;
+      --success: #4ade80;
+      --warn: #fbbf24;
+      --err: #f87171;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+      --font-sans: "DM Sans", "Inter", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-deep);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 92, 255, 0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 50%, rgba(92, 124, 255, 0.06), transparent);
+    }
+
+    .app-shell {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    header {
+      display: flex;
