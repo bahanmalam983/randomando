@@ -508,3 +508,54 @@
           btn.classList.add("selected");
           selectedBound = parseInt(btn.dataset.bound, 10);
           customBound.value = "";
+        });
+      });
+
+      customBound.addEventListener("input", function () {
+        if (customBound.value) {
+          document.querySelectorAll(".dice-btn").forEach(function (b) { b.classList.remove("selected"); });
+        }
+      });
+
+      document.querySelectorAll(".preset-row button").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const n = parseInt(btn.dataset.preset, 10);
+          if (!isNaN(n)) {
+            customBound.value = n;
+            document.querySelectorAll(".dice-btn").forEach(function (b) { b.classList.remove("selected"); });
+          }
+        });
+      });
+
+      requestBtn.addEventListener("click", async function () {
+        if (!contract || !signer) return;
+        const bound = getBound();
+        if (bound < 2) {
+          setStatus("Enter a bound of at least 2.", "error");
+          return;
+        }
+        requestBtn.disabled = true;
+        setStatus("Requesting on-chain…", "");
+        try {
+          const tx = await contract.requestRand(bound);
+          setStatus("Waiting for confirmation…", "");
+          const receipt = await tx.wait();
+          const addr = await signer.getAddress();
+          const nonce = receipt.logs && receipt.logs.length
+            ? (await contract.callerNonce(addr)) - 1
+            : 0;
+          lastRequest = { nonce, bound };
+          history.unshift({ nonce, bound, result: null, pending: true });
+          renderHistory();
+          setStatus("Request confirmed. Wait a few blocks then click Reveal last.", "success");
+          setResult("—", "Reveal when ready");
+        } catch (e) {
+          setStatus(e.message || "Request failed.", "error");
+        }
+        requestBtn.disabled = false;
+      });
+
+      revealBtn.addEventListener("click", async function () {
+        if (!contract || !signer) return;
+        const addr = await signer.getAddress();
+        const nonce = lastRequest.nonce;
