@@ -559,3 +559,54 @@
         if (!contract || !signer) return;
         const addr = await signer.getAddress();
         const nonce = lastRequest.nonce;
+        const bound = lastRequest.bound;
+        if (nonce == null) {
+          setStatus("Request a number first.", "warn");
+          return;
+        }
+        revealBtn.disabled = true;
+        setStatus("Revealing…", "");
+        try {
+          const tx = await contract.revealRand(addr, nonce, bound);
+          await tx.wait();
+          const result = await contract.computeNext(addr, nonce, bound);
+          setResult(String(Number(result) + 1), "Result (1–" + bound + ")");
+          setStatus("Revealed successfully.", "success");
+          const idx = history.findIndex(function (h) { return h.nonce === nonce && h.bound === bound; });
+          if (idx >= 0) {
+            history[idx].result = Number(result) + 1;
+            history[idx].pending = false;
+          }
+          renderHistory();
+        } catch (e) {
+          setStatus(e.message || "Reveal failed. Try again after a few blocks.", "error");
+        }
+        revealBtn.disabled = false;
+      });
+
+      function renderHistory() {
+        if (!history.length) {
+          historyList.innerHTML = "<li class=\"history-item\" style=\"color: var(--text-muted);\">No requests yet.</li>";
+          return;
+        }
+        historyList.innerHTML = history.slice(0, 15).map(function (h) {
+          const res = h.pending
+            ? "<span class=\"history-pending\">Pending</span>"
+            : "<span class=\"history-result\">" + h.result + "</span>";
+          return "<li class=\"history-item\"><span class=\"history-nonce\">#" + h.nonce + "</span> <span class=\"history-bound\">1–" + h.bound + "</span> → " + res + "</li>";
+        }).join("");
+      }
+
+      async function loadHistory() {
+        if (!contract || !signer) return;
+        try {
+          const addr = await signer.getAddress();
+          const nonceCount = await contract.callerNonce(addr);
+          history = [];
+          for (let i = 0; i < Math.min(Number(nonceCount), 20); i++) {
+            history.push({ nonce: i, bound: null, result: null, pending: true });
+          }
+          renderHistory();
+        } catch (_) {
+          renderHistory();
+        }
