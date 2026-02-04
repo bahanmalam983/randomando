@@ -151,3 +151,54 @@
     .dice-btn:hover {
       border-color: var(--accent);
       background: rgba(124, 92, 255, 0.08);
+    }
+    .dice-btn.selected {
+      border-color: var(--accent);
+      background: rgba(124, 92, 255, 0.15);
+    }
+
+    .custom-range-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .custom-range-row input {
+      width: 120px;
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+    }
+    .custom-range-row input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .action-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .result-box {
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.5rem;
+      background: var(--bg-elevated);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .result-value {
