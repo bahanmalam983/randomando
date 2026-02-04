@@ -457,3 +457,54 @@
         resultLabel.textContent = label || "";
         if (value !== "—") resultValue.classList.add("revealed");
       }
+
+      function getBound() {
+        const custom = parseInt(customBound.value, 10);
+        if (!isNaN(custom) && custom >= 2) return Math.min(999983, custom);
+        return selectedBound;
+      }
+
+      function updateNetworkInfo() {
+        if (!provider) return;
+        provider.getNetwork().then(function (net) {
+          const name = net.name !== "unknown" ? net.name : "Chain " + net.chainId.toString();
+          networkBadge.textContent = name;
+        }).catch(function () {
+          networkBadge.textContent = "—";
+        });
+      }
+
+      async function connect() {
+        if (typeof window.ethereum === "undefined") {
+          setStatus("Install MetaMask or another Web3 wallet.", "error");
+          return;
+        }
+        try {
+          provider = new ethers.BrowserProvider(window.ethereum);
+          const accounts = await provider.send("eth_requestAccounts", []);
+          if (!accounts.length) {
+            setStatus("No account selected.", "error");
+            return;
+          }
+          signer = await provider.getSigner();
+          contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+          userAddress.textContent = "Connected: " + accounts[0].slice(0, 6) + "…" + accounts[0].slice(-4);
+          connectBtn.textContent = "Connected";
+          connectBtn.disabled = true;
+          updateNetworkInfo();
+          requestBtn.disabled = false;
+          revealBtn.disabled = false;
+          await loadHistory();
+          await updateContractInfo();
+          setStatus("Wallet connected. Choose a range and request a number.", "success");
+        } catch (e) {
+          setStatus(e.message || "Connection failed.", "error");
+        }
+      }
+
+      document.querySelectorAll(".dice-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".dice-btn").forEach(function (b) { b.classList.remove("selected"); });
+          btn.classList.add("selected");
+          selectedBound = parseInt(btn.dataset.bound, 10);
+          customBound.value = "";
