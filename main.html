@@ -610,3 +610,42 @@
         } catch (_) {
           renderHistory();
         }
+      }
+
+      async function updateContractInfo() {
+        if (!provider || !contract) return;
+        try {
+          const net = await provider.getNetwork();
+          document.getElementById("infoChain").textContent = net.name !== "unknown" ? net.name : "Chain " + net.chainId.toString();
+          const delay = await contract.blockDelay();
+          document.getElementById("infoBlockDelay").textContent = delay.toString() + " blocks";
+        } catch (_) {
+          document.getElementById("infoChain").textContent = "—";
+          document.getElementById("infoBlockDelay").textContent = "—";
+        }
+        document.getElementById("contractAddr").textContent = CONTRACT_ADDRESS;
+      }
+
+      connectBtn.addEventListener("click", connect);
+
+      if (window.ethereum) {
+        window.ethereum.on("chainChanged", function () {
+          updateNetworkInfo();
+          if (provider) contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+        });
+        window.ethereum.on("accountsChanged", function (accounts) {
+          if (!accounts.length) {
+            connectBtn.textContent = "Connect wallet";
+            connectBtn.disabled = false;
+            userAddress.textContent = "";
+            requestBtn.disabled = true;
+            revealBtn.disabled = true;
+            history = [];
+            renderHistory();
+          }
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
