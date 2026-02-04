@@ -304,3 +304,54 @@
       margin-bottom: 0.5rem;
       background: var(--bg-elevated);
       border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .preset-row button:hover { border-color: var(--accent); color: var(--accent); }
+
+    .contract-addr {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      word-break: break-all;
+      background: var(--bg-elevated);
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      margin-top: 0.5rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <h1 class="logo">Random<span>ando</span></h1>
+      <div class="wallet-row">
+        <span class="network-badge" id="networkBadge">—</span>
+        <button type="button" class="btn btn-primary" id="connectBtn">Connect wallet</button>
+        <span class="address-display" id="userAddress"></span>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2 class="card-title">Choose range</h2>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+        Pick a dice size or enter a custom upper bound (1 to N, inclusive). Your number will be revealed after a short delay.
+      </p>
+      <div class="dice-grid">
+        <button type="button" class="dice-btn" data-bound="6">D6</button>
+        <button type="button" class="dice-btn" data-bound="10">D10</button>
+        <button type="button" class="dice-btn" data-bound="12">D12</button>
+        <button type="button" class="dice-btn" data-bound="20">D20</button>
+        <button type="button" class="dice-btn" data-bound="100">D100</button>
+        <button type="button" class="dice-btn" data-bound="1000">1–1000</button>
+      </div>
+      <div class="custom-range-row">
+        <label for="customBound">Custom max:</label>
+        <input type="number" id="customBound" min="2" max="999983" placeholder="e.g. 42" />
+      </div>
+      <div style="margin-top: 1rem;">
+        <div class="card-title" style="margin-bottom: 0.5rem;">Quick presets</div>
+        <div class="preset-row">
+          <button type="button" data-preset="2">Coin flip (2)</button>
+          <button type="button" data-preset="7">Weekday (7)</button>
